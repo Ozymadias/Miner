@@ -1,13 +1,46 @@
 public class MineSweeperImpl implements MineSweeper {
     private String hintField;
 
-    public void setMineField(String s) {
-        String[] rows = s.split("\n");
+    public void setMineField(String mineField) throws IllegalArgumentException {
+        String[] rows = mineField.split("\n");
         int numberOfRows = rows.length;
-        int numberOfColumns = s.length() / numberOfRows;
+        int numberOfColumns = mineField.length() / numberOfRows;
         char[][] board = new char[numberOfRows][numberOfColumns];
-        for (int i = 0; i < numberOfRows; i++)
+
+        checkIfIsProperlyFormatted(rows, numberOfColumns);
+        fillBoard(rows, board);
+        setHintField(board);
+    }
+
+    private void checkIfIsProperlyFormatted(String[] rows, int numberOfColumns) throws IllegalArgumentException {
+        for (int i = 0; i < rows.length; i++)
+            if (isABoolean(numberOfColumns, rows[i].toCharArray()))
+                throw new IllegalArgumentException();
+    }
+
+    private boolean isABoolean(int numberOfColumns, char[] fields) {
+        return fields.length != numberOfColumns || hasImproperCharacters(fields);
+    }
+
+    private boolean hasImproperCharacters(char[] fields) {
+        for (char field : fields)
+            if (!isAMine(field) && field != '.')
+                return true;
+        return false;
+    }
+
+    private boolean isAMine(char c) {
+        return c == '*';
+    }
+
+    private void fillBoard(String[] rows, char[][] board) {
+        for (int i = 0; i < rows.length; i++)
             board[i] = rows[i].toCharArray();
+    }
+
+    private void setHintField(char[][] board) {
+        int numberOfRows = board.length;
+        int numberOfColumns = board[0].length;
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < numberOfRows; i++) {
             for (int j = 0; j < numberOfColumns; j++)
@@ -34,10 +67,6 @@ public class MineSweeperImpl implements MineSweeper {
         int numberOfRows = board.length;
         int numberOfColumns = board[0].length;
         return i >= 0 && i < numberOfRows && j >= 0 && j < numberOfColumns;
-    }
-
-    private boolean isAMine(char c) {
-        return c == '*';
     }
 
     public String getHintField() {

@@ -12,4 +12,22 @@ public class MineSweeperTest {
 
         assertEquals("1*\n11", hintField);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionWhenGivenMineFieldWithImproperCharacter() throws Exception {
+        MineSweeper mineSweeper = new MineSweeperImpl();
+        mineSweeper.setMineField(".*\n.w");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionWhenGivenNotRectangularMineField() throws Exception {
+        MineSweeper mineSweeper = new MineSweeperImpl();
+        mineSweeper.setMineField(".*\n...");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionWhenGivenNotRectangularMineField2() throws Exception {
+        MineSweeper mineSweeper = new MineSweeperImpl();
+        mineSweeper.setMineField(".*\n..\n.");
+    }
 }
