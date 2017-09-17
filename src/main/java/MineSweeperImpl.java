@@ -1,6 +1,7 @@
 public class MineSweeperImpl implements MineSweeper {
     private String hintField;
 
+    @Override
     public void setMineField(String mineField) throws IllegalArgumentException {
         String[] rows = mineField.split("\n");
         int numberOfRows = rows.length;
@@ -12,13 +13,20 @@ public class MineSweeperImpl implements MineSweeper {
         setHintField(board);
     }
 
+    @Override
+    public String getHintField() throws IllegalStateException {
+        if (hintField == null)
+            throw new IllegalStateException();
+        return hintField;
+    }
+
     private void checkIfIsProperlyFormatted(String[] rows, int numberOfColumns) throws IllegalArgumentException {
-        for (int i = 0; i < rows.length; i++)
-            if (isABoolean(numberOfColumns, rows[i].toCharArray()))
+        for (String row : rows)
+            if (isImproperlyFormatted(numberOfColumns, row.toCharArray()))
                 throw new IllegalArgumentException();
     }
 
-    private boolean isABoolean(int numberOfColumns, char[] fields) {
+    private boolean isImproperlyFormatted(int numberOfColumns, char[] fields) {
         return fields.length != numberOfColumns || hasImproperCharacters(fields);
     }
 
@@ -27,10 +35,6 @@ public class MineSweeperImpl implements MineSweeper {
             if (!isAMine(field) && field != '.')
                 return true;
         return false;
-    }
-
-    private boolean isAMine(char c) {
-        return c == '*';
     }
 
     private void fillBoard(String[] rows, char[][] board) {
@@ -63,13 +67,13 @@ public class MineSweeperImpl implements MineSweeper {
         return result;
     }
 
+    private boolean isAMine(char c) {
+        return c == '*';
+    }
+
     private boolean isInABoard(char[][] board, int i, int j) {
         int numberOfRows = board.length;
         int numberOfColumns = board[0].length;
         return i >= 0 && i < numberOfRows && j >= 0 && j < numberOfColumns;
-    }
-
-    public String getHintField() {
-        return hintField;
     }
 }

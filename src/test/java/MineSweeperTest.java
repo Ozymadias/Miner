@@ -30,4 +30,21 @@ public class MineSweeperTest {
         MineSweeper mineSweeper = new MineSweeperImpl();
         mineSweeper.setMineField(".*\n..\n.");
     }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenGivenEmptyString() throws Exception {
+        MineSweeper mineSweeper = new MineSweeperImpl();
+        mineSweeper.setMineField("");
+
+        String hintField = mineSweeper.getHintField();
+
+        assertEquals("", hintField);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowIllegalStateExceptionWhenSetMineFieldWasNotCalled() throws Exception {
+        MineSweeper mineSweeper = new MineSweeperImpl();
+
+        mineSweeper.getHintField();
+    }
 }
